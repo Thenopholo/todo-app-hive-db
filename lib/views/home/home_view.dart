@@ -6,8 +6,10 @@ import 'package:curso_flutter/utils/constants.dart';
 import 'package:curso_flutter/views/home/components/fab.dart';
 import 'package:curso_flutter/views/home/components/home_app_bar.dart';
 import 'package:curso_flutter/views/home/components/slider_drawer.dart';
+import 'package:curso_flutter/views/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:animate_do/animate_do.dart';
 import 'widgets/task_widged.dart';
@@ -21,36 +23,55 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
-  final List<int> testing = [1];
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      backgroundColor: Colors.white,
 
-      //FAB
-      floatingActionButton: const Fab(),
+    final base = BaseWidget.of(context);
 
-      ///BODY
-      body: SliderDrawer(
-        key: drawerKey,
-        isDraggable: false,
-        animationDuration: 1000,
+    return ValueListenableBuilder(
+        valueListenable: base.dataStore.box.listenable(),
+        builder: (ctx, Box<Task> box, Widget? child) {
+          var tasks = box.values.toList();
+          /// FOR SORTING LIST
+          tasks.sort((a, b) => a.createdAtTime.compareTo(b.createdAtTime));
+          
+          return Scaffold(
+            backgroundColor: Colors.white,
 
-        ///DRAWER
-        slider: CustomDrawer(),
+            //FAB
+            floatingActionButton: const Fab(),
 
-        appBar: HomeAppBar(
-          drawerKey: drawerKey,
-        ),
+            ///BODY
+            body: SliderDrawer(
+              key: drawerKey,
+              isDraggable: false,
+              animationDuration: 1000,
 
-        ///MAIN BODY
-        child: _buildHomeBody(textTheme),
-      ),
-    );
+              ///DRAWER
+              slider: CustomDrawer(),
+
+              appBar: HomeAppBar(
+                drawerKey: drawerKey,
+              ),
+
+              ///MAIN BODY
+              child: _buildHomeBody(
+                textTheme,
+                base,
+                tasks,
+              ),
+            ),
+          );
+        });
   }
 
-  Widget _buildHomeBody(TextTheme textTheme) {
+  Widget _buildHomeBody(
+    TextTheme textTheme,
+    BaseWidget base,
+    List<Task> tasks,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -115,49 +136,39 @@ class _HomeViewState extends State<HomeView> {
           SizedBox(
             width: double.infinity,
             height: 443,
-            child: testing.isNotEmpty
+            child: tasks.isNotEmpty
 
                 /// TASK LIST NOT EMPTY
                 ? ListView.builder(
-                    itemCount: 1,
+                    itemCount: tasks.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: ((context, index) {
+                      /// GET SINGLE TASK FOR SHOWING IN LIST
+                      var task = tasks[index];
                       return Dismissible(
-                          direction: DismissDirection.horizontal,
-                          onDismissed: (_) {
-                            /// WE WILL REMOVE THE CORRENT TASK FROM DB
-                          },
-                          background: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.delete_outline,
+                        direction: DismissDirection.horizontal,
+                        onDismissed: (_) {
+                          base.dataStore.deleteTask(task: task);
+                        },
+                        background: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.delete_outline,
+                              color: Colors.black54,
+                            ),
+                            8.w,
+                            const Text(
+                              AppStr.deletedTask,
+                              style: TextStyle(
                                 color: Colors.black54,
                               ),
-                              8.w,
-                              const Text(
-                                AppStr.deletedTask,
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                ),
-                              )
-                            ],
-                          ),
-                          key: Key(
-                            index.toString(),
-                          ),
-                          child: TaskWidget(
-                            /// THIS IS ONLY FOR TESTING
-                            /// WE WILL USE TASK FROM DB
-                            task: Task(
-                              id: "1",
-                              title: "Home Task",
-                              subTitle: "Cleaning room",
-                              createdAtTime: DateTime.now(),
-                              createdAtDate: DateTime.now(),
-                              isCompleted: false,
-                            ),
-                          ));
+                            )
+                          ],
+                        ),
+                        key: Key(task.id),
+                        child: TaskWidget(task: task),
+                      );
                     }))
 
                 ///TASK LIST IS EMPTY
@@ -171,7 +182,7 @@ class _HomeViewState extends State<HomeView> {
                           height: 200,
                           child: Lottie.asset(
                             lottieURL,
-                            animate: testing.isNotEmpty ? false : true,
+                            animate: tasks.isNotEmpty ? false : true,
                           ),
                         ),
                       ),

@@ -1,5 +1,7 @@
 import 'package:curso_flutter/models/task.dart';
 import 'package:curso_flutter/utils/app_colors.dart';
+import 'package:curso_flutter/views/tasks/task_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -37,7 +39,16 @@ class _TaskWidgetState extends State<TaskWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        ///TODO: NAVEGATE TO TASK VIEW TO SEE TASK DETAILS
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (ctx) => TaskView(
+              titleTaskController: titleController,
+              descripitionTaskController: subtitleController,
+              task: widget.task,
+            ),
+          ),
+        );
       },
       child: AnimatedContainer(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -58,7 +69,8 @@ class _TaskWidgetState extends State<TaskWidget> {
           ///CHECK ICON
           leading: GestureDetector(
             onTap: () {
-              ///  TODO: CHECK AND UNCHECK TASK
+              widget.task.isCompleted = !widget.task.isCompleted;
+              widget.task.save();
             },
             child: AnimatedContainer(
                 duration: const Duration(microseconds: 600),

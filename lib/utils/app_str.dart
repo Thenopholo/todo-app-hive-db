@@ -4,7 +4,7 @@ class AppStr {
   static const String doneAllTask = "Você completou todas as suas tarefas!👌";
   static const String addNewTask = "Nova";
   static const String addNewTaskButton = "Adicionar Tarefa";
-  static const String updateCurrentTask = "Atualize sua tarefa";
+  static const String updateCurrentTask = "Sua ";
   static const String taskStrnig = "Tarefa";
   static const String titleOfTitleTextField = "Qual a sua nova demanda?";
   static const String addNote = 'Adicionar anotação';
