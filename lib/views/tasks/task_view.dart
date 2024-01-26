@@ -1,8 +1,11 @@
 import 'dart:developer';
+import 'dart:math';
 import 'package:curso_flutter/extensions/space_ext.dart';
 import 'package:curso_flutter/models/task.dart';
 import 'package:curso_flutter/utils/app_colors.dart';
 import 'package:curso_flutter/utils/app_str.dart';
+import 'package:curso_flutter/utils/constants.dart';
+import 'package:curso_flutter/views/main.dart';
 import 'package:curso_flutter/views/tasks/components/date_time_selection.dart';
 import 'package:curso_flutter/views/tasks/components/rep_text_field.dart';
 import 'package:curso_flutter/views/tasks/widgets/task_view_app_bar.dart';
@@ -28,7 +31,7 @@ class TaskView extends StatefulWidget {
 
 class _TaskViewState extends State<TaskView> {
   var title;
-  var subtitle;
+  var subTitle;
   DateTime? time;
   DateTime? date;
 
@@ -85,6 +88,46 @@ class _TaskViewState extends State<TaskView> {
     }
   }
 
+  /// MAIN FUNCITON FOR CREATING OR UPDATING TASK
+  dynamic isTaskAlreadyExistUpdateOtherwiseCreate() {
+    /// IF TASK ALREADY EXIST UPDATE IT
+    if (widget.titleTaskController?.text != null &&
+        widget.descripitionTaskController?.text != null) {
+      try {
+        widget.titleTaskController?.text = title;
+        widget.descripitionTaskController?.text = subTitle;
+
+        widget.task?.save();
+
+        ///TODO: POP PAGE
+      } catch (e) {
+        /// IF USER WANT TO UPDATE TASK BUT DONT WANT TO CHANGE ANYTHING, WE WILL SHOW THIS WARNING
+        updateTaskWarnig(context);
+      }
+    }
+
+    ///HERE WE CREATE NEW TASK
+
+    else {
+      if (title != null && subTitle != null) {
+        var task = Task.create(
+          title: title,
+          subTitle: subTitle,
+          createdAtDate: date,
+          createdAtTime: time,
+        );
+
+        /// WE ARE ADDING THIS NEW TASK TO HIVE DB USING INHERITED WIDGET
+        BaseWidget.of(context).dataStore.addTask(task: task);
+
+        ///TODO: POP PAGE
+      } else {
+        /// WARNING
+        emptyWarning(context);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -124,40 +167,44 @@ class _TaskViewState extends State<TaskView> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: isTaskAlreadyExist()
+            ? MainAxisAlignment.center
+            : MainAxisAlignment.spaceEvenly,
         children: [
-          ///DELETE CURRENT TASK BUTTON
-          MaterialButton(
-            onPressed: () {
-              log('Tarefa apagada');
-            },
-            minWidth: 150,
-            color: AppColors.primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            height: 55,
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-                5.w,
-                const Text(
-                  AppStr.deleteTask,
-                  style: TextStyle(
-                    color: Colors.white,
+          isTaskAlreadyExist()
+              ? Container()
+              :
+
+              ///DELETE CURRENT TASK BUTTON
+              MaterialButton(
+                  onPressed: () {},
+                  minWidth: 150,
+                  color: AppColors.primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  height: 55,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                      5.w,
+                      const Text(
+                        AppStr.deleteTask,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
 
           ///ADD NEW TASK BUTTON
           MaterialButton(
             onPressed: () {
-              log('Nova tarefa adicionada');
+              isTaskAlreadyExistUpdateOtherwiseCreate();
             },
             minWidth: 150,
             color: const Color(0xFF2C3037),
@@ -212,10 +259,10 @@ class _TaskViewState extends State<TaskView> {
             controller: widget.descripitionTaskController,
             isForDescripition: true,
             onFieldSubmitted: (String inputSubTitle) {
-              subtitle = inputSubTitle;
+              subTitle = inputSubTitle;
             },
             onChanged: (String inputSubTitle) {
-              subtitle = inputSubTitle;
+              subTitle = inputSubTitle;
             },
           ),
 

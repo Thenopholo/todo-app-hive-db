@@ -22,7 +22,7 @@ class _TaskWidgetState extends State<TaskWidget> {
   @override
   void initState() {
     titleController.text = widget.task.title;
-    subtitleController.text = widget.task.subtitle;
+    subtitleController.text = widget.task.subTitle;
     super.initState();
   }
 

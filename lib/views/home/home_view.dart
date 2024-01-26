@@ -152,7 +152,7 @@ class _HomeViewState extends State<HomeView> {
                             task: Task(
                               id: "1",
                               title: "Home Task",
-                              subtitle: "Cleaning room",
+                              subTitle: "Cleaning room",
                               createdAtTime: DateTime.now(),
                               createdAtDate: DateTime.now(),
                               isCompleted: false,

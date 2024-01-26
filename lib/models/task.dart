@@ -7,7 +7,7 @@ class Task extends HiveObject {
   Task({
     required this.id,
     required this.title,
-    required this.subtitle,
+    required this.subTitle,
     required this.createdAtTime,
     required this.createdAtDate,
     required this.isCompleted,
@@ -18,7 +18,7 @@ class Task extends HiveObject {
   @HiveField(1) //TITLE
   String title;
   @HiveField(2) //SUBTITLE
-  String subtitle;
+  String subTitle;
   @HiveField(3) //CREATED AT TIME
   DateTime createdAtTime;
   @HiveField(4) //CREATED AT DATE
@@ -28,14 +28,14 @@ class Task extends HiveObject {
   //CREATE A NEW TASK
   factory Task.create({
     required String? title,
-    required String? subtitle,
+    required String? subTitle,
     DateTime? createdAtTime,
     DateTime? createdAtDate,
   }) =>
       Task(
         id: const Uuid().v1(),
         title: title ?? "",
-        subtitle: subtitle ?? "",
+        subTitle: subTitle ?? "",
         createdAtTime: (createdAtTime ?? DateTime.now()),
         createdAtDate: (createdAtDate ?? DateTime.now()),
         isCompleted: false,
