@@ -9,7 +9,7 @@ class AppStr {
   static const String titleOfTitleTextField = "Qual a sua nova demanda?";
   static const String addNote = 'Adicionar anotação';
   static const String timeString = "Horário de entrega";
-  static const String dateString = "Prazo para entrega";
+  static const String dateString = "Data da entrega";
   static const String deleteTask = "Apagar Tarefa";
   static const String addTaskString = "Adcionar Tarefa";
   static const String updateTaskString = "Atualizar Tarefa";

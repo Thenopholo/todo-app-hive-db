@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
-
 part 'task.g.dart';
 
 @HiveType(typeId: 0)
@@ -21,9 +20,9 @@ class Task extends HiveObject {
   @HiveField(2) //SUBTITLE
   String subtitle;
   @HiveField(3) //CREATED AT TIME
-  String createdAtTime;
+  DateTime createdAtTime;
   @HiveField(4) //CREATED AT DATE
-  String createdAtDate;
+  DateTime createdAtDate;
   @HiveField(5) //IS COMPLETED
   bool isCompleted;
   //CREATE A NEW TASK
@@ -37,8 +36,8 @@ class Task extends HiveObject {
         id: const Uuid().v1(),
         title: title ?? "",
         subtitle: subtitle ?? "",
-        createdAtTime: (createdAtTime ?? DateTime.now()).toIso8601String(),
-        createdAtDate: (createdAtDate ?? DateTime.now()).toIso8601String(),
+        createdAtTime: (createdAtTime ?? DateTime.now()),
+        createdAtDate: (createdAtDate ?? DateTime.now()),
         isCompleted: false,
       );
 }

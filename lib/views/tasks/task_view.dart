@@ -8,6 +8,7 @@ import 'package:curso_flutter/views/tasks/components/rep_text_field.dart';
 import 'package:curso_flutter/views/tasks/widgets/task_view_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
+import 'package:intl/intl.dart';
 
 class TaskView extends StatefulWidget {
   const TaskView({
@@ -31,9 +32,57 @@ class _TaskViewState extends State<TaskView> {
   DateTime? time;
   DateTime? date;
 
+  /// SHOW SELECTED TIME AS STRING
+  String showTime(DateTime? time) {
+    if (widget.task?.createdAtTime == null) {
+      if (time == null) {
+        return DateFormat('hh:mm a').format(DateTime.now()).toString();
+      } else {
+        return DateFormat('hh:mm a').format(time).toString();
+      }
+    } else {
+      return DateFormat('hh:mm a')
+          .format(widget.task!.createdAtTime)
+          .toString();
+    }
+  }
+
+  /// SHOW SELECTED DATE AS STRING
+  String showDate(DateTime? date) {
+    if (widget.task?.createdAtDate == null) {
+      if (date == null) {
+        return DateFormat('dd/MM/yyyy').format(DateTime.now()).toString();
+      } else {
+        return DateFormat('dd/MM/yyyy').format(date).toString();
+      }
+    } else {
+      return DateFormat('dd/MM/yyyy')
+          .format(widget.task!.createdAtDate)
+          .toString();
+    }
+  }
+
+  /// SHOW SELECTED DATE AS DATEFORMAT FOR INITIAL TIME
+  DateTime showDateAsDateTime(DateTime? date) {
+    if (widget.task?.createdAtDate == null) {
+      if (date == null) {
+        return DateTime.now();
+      } else {
+        return date;
+      }
+    } else {
+      return widget.task!.createdAtDate;
+    }
+  }
+
+  /// IF TASK ALREADY EXIST RETURN TRUE OTHERWISE FALSE
   bool isTaskAlreadyExist() {
-    return widget.titleTaskController?.text?.isEmpty != true &&
-        widget.descripitionTaskController?.text?.isEmpty != true;
+    if (widget.titleTaskController?.text == null &&
+        widget.descripitionTaskController?.text == null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -111,7 +160,7 @@ class _TaskViewState extends State<TaskView> {
               log('Nova tarefa adicionada');
             },
             minWidth: 150,
-            color: Color(0xFF2C3037),
+            color: const Color(0xFF2C3037),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
@@ -178,7 +227,7 @@ class _TaskViewState extends State<TaskView> {
                 builder: (_) => SizedBox(
                   height: 280,
                   child: TimePickerWidget(
-                    // initDateTime: ,
+                    initDateTime: showDateAsDateTime(time),
                     dateFormat: 'HH:mm',
                     onChange: (_, __) {},
                     onConfirm: (dateTime, _) {
@@ -186,7 +235,7 @@ class _TaskViewState extends State<TaskView> {
                         if (widget.task?.createdAtTime == null) {
                           time = dateTime;
                         } else {
-                          widget.task!.createdAtTime = dateTime.toString();
+                          widget.task!.createdAtTime = dateTime;
                         }
                       });
                     },
@@ -195,6 +244,9 @@ class _TaskViewState extends State<TaskView> {
               );
             },
             title: AppStr.timeString,
+
+            /// FOR TESTING PURPOSES
+            time: showTime(time),
           ),
 
           ///DATE SELECTION
@@ -204,11 +256,23 @@ class _TaskViewState extends State<TaskView> {
                 context,
                 maxDateTime: DateTime(2030, 4, 5),
                 minDateTime: DateTime.now(),
-                // Initial DateTime:
-                onConfirm: (deteTime, _) {},
+                initialDateTime: showDateAsDateTime(date),
+                onConfirm: (dateTime, _) {
+                  setState(() {
+                    if (widget.task?.createdAtDate == null) {
+                      date = dateTime;
+                    } else {
+                      widget.task!.createdAtDate = dateTime;
+                    }
+                  });
+                },
               );
             },
             title: AppStr.dateString,
+
+            /// FOR TESTING PURPOSES
+            time: showDate(date),
+            isTime: true,
           ),
         ],
       ),

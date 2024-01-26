@@ -147,12 +147,14 @@ class _HomeViewState extends State<HomeView> {
                             index.toString(),
                           ),
                           child: TaskWidget(
+                            /// THIS IS ONLY FOR TESTING
+                            /// WE WILL USE TASK FROM DB
                             task: Task(
                               id: "1",
                               title: "Home Task",
                               subtitle: "Cleaning room",
-                              createdAtTime: DateTime.now().toIso8601String(),
-                              createdAtDate: DateTime.now().toIso8601String(),
+                              createdAtTime: DateTime.now(),
+                              createdAtDate: DateTime.now(),
                               isCompleted: false,
                             ),
                           ));

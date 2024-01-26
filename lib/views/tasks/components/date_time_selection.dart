@@ -5,10 +5,14 @@ class DateTimeSelection extends StatelessWidget {
     super.key,
     required this.onTap,
     required this.title,
+    required this.time,
+    this.isTime = false,
   });
 
   final VoidCallback onTap;
   final String title;
+  final String time;
+  final bool isTime;
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +44,16 @@ class DateTimeSelection extends StatelessWidget {
               margin: const EdgeInsets.only(
                 right: 10,
               ),
-              width: 80,
+              width: isTime ? 130 : 100,
               height: 35,
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
+                /// THIS WILL SHOW DATE TIME AS TIME
                 child: Text(
-                  title,
+                  time,
                   style: textTheme.titleSmall,
                 ),
               ),

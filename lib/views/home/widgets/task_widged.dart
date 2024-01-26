@@ -58,7 +58,7 @@ class _TaskWidgetState extends State<TaskWidget> {
           ///CHECK ICON
           leading: GestureDetector(
             onTap: () {
-              ///  TODO: CHECK AN UNCHECK TASK
+              ///  TODO: CHECK AND UNCHECK TASK
             },
             child: AnimatedContainer(
                 duration: const Duration(microseconds: 600),
@@ -98,7 +98,9 @@ class _TaskWidgetState extends State<TaskWidget> {
               Text(
                 subtitleController.text,
                 style: TextStyle(
-                  color: Colors.black54,
+                  color: widget.task.isCompleted
+                      ? AppColors.primaryColor
+                      : Colors.black,
                   fontWeight: FontWeight.w500,
                   decoration: widget.task.isCompleted
                       ? TextDecoration.lineThrough
@@ -115,8 +117,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        DateFormat('hh:mm a')
-                            .format(DateTime.parse(widget.task.createdAtTime)),
+                        DateFormat('hh:mm a').format(widget.task.createdAtTime),
                         style: TextStyle(
                           fontSize: 14,
                           color: widget.task.isCompleted
@@ -125,8 +126,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                         ),
                       ),
                       Text(
-                        DateFormat.yMMMEd()
-                            .format(DateTime.parse(widget.task.createdAtDate)),
+                        DateFormat.yMMMEd().format(widget.task.createdAtDate),
                         style: TextStyle(
                           fontSize: 12,
                           color: widget.task.isCompleted
