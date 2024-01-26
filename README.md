@@ -1,16 +1,49 @@
-# curso_flutter
+# Hive TODO APP
 
-curso_alura
+This is a TODO App project built using Hive DB.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Add new tasks
+- Mark tasks as completed
+- Edit task details
+- Delete tasks
+- Filter tasks by status (completed/incomplete)
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Clone the repository:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    ```bash
+    git clone https://github.com/your-username/todo-app.git
+    ```
+
+2. Install the required dependencies:
+
+    ```bash
+    cd todo-app
+    flutter pub get
+    ```
+
+3. Run the app:
+
+    ```bash
+    flutter run
+    ```
+
+## Usage
+
+- Launch the app on your device/emulator.
+- Add new tasks by tapping on the "+" button.
+- Mark tasks as completed by tapping on the checkbox.
+- Edit task details by tapping on the task.
+- Delete tasks by swiping them to the left or right.
+- Use the filter options to view completed or incomplete tasks.
+
+## Contributing
+
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
