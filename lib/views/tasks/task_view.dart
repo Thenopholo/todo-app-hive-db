@@ -32,12 +32,8 @@ class _TaskViewState extends State<TaskView> {
   DateTime? date;
 
   bool isTaskAlreadyExist() {
-    if (widget.titleTaskController?.text == null &&
-        widget.descripitionTaskController?.text == null) {
-      return true;
-    } else {
-      return false;
-    }
+    return widget.titleTaskController?.text?.isEmpty != true &&
+        widget.descripitionTaskController?.text?.isEmpty != true;
   }
 
   @override
@@ -149,7 +145,7 @@ class _TaskViewState extends State<TaskView> {
 
           ///TITLE TEXT FIELD
           RepTextField(
-            controller: widget.titleTaskController!,
+            controller: widget.titleTaskController,
             onFieldSubmitted: (String inputTitle) {
               title = inputTitle;
             },
@@ -164,7 +160,7 @@ class _TaskViewState extends State<TaskView> {
 
           ///NOTE TEXT FIELD
           RepTextField(
-            controller: widget.descripitionTaskController!,
+            controller: widget.descripitionTaskController,
             isForDescripition: true,
             onFieldSubmitted: (String inputSubTitle) {
               subtitle = inputSubTitle;
