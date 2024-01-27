@@ -24,6 +24,26 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
 
+  /// CHECK VALUE OF CIRCLE INDICATOR
+  dynamic valueOfIdicator(List<Task> task) {
+    if (task.isNotEmpty) {
+      return task.length;
+    } else {
+      return 3;
+    }
+  }
+
+  /// CHECK DONE TASKS
+  int checkDoneTask(List<Task> tasks) {
+    int i = 0;
+    for (Task doneTask in tasks) {
+      if (doneTask.isCompleted) {
+        i++;
+      }
+    }
+    return i;
+  }
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -34,9 +54,10 @@ class _HomeViewState extends State<HomeView> {
         valueListenable: base.dataStore.box.listenable(),
         builder: (ctx, Box<Task> box, Widget? child) {
           var tasks = box.values.toList();
+
           /// FOR SORTING LIST
           tasks.sort((a, b) => a.createdAtTime.compareTo(b.createdAtTime));
-          
+
           return Scaffold(
             backgroundColor: Colors.white,
 
@@ -88,13 +109,13 @@ class _HomeViewState extends State<HomeView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ///PROGRESS IDICATOR
-                const SizedBox(
+                SizedBox(
                   width: 30,
                   height: 30,
                   child: CircularProgressIndicator(
-                    value: 2 / 3,
+                    value: checkDoneTask(tasks) / valueOfIdicator(tasks),
                     backgroundColor: Colors.black26,
-                    valueColor: AlwaysStoppedAnimation(
+                    valueColor: const AlwaysStoppedAnimation(
                       AppColors.primaryColor,
                     ),
                   ),
@@ -114,7 +135,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     3.h,
                     Text(
-                      '2/3 Tarefas',
+                      '${checkDoneTask(tasks)} de ${tasks.length} tarefas, foram concluídas',
                       style: textTheme.titleMedium,
                     )
                   ],
