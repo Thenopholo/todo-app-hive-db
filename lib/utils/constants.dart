@@ -1,4 +1,5 @@
 import 'package:curso_flutter/utils/app_str.dart';
+import 'package:curso_flutter/views/main.dart';
 import 'package:flutter/material.dart';
 import 'package:ftoast/ftoast.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
@@ -22,7 +23,7 @@ dynamic updateTaskWarnig(BuildContext context) {
   return FToast.toast(
     context,
     msg: AppStr.oopsMsg,
-    subMsg: 'Adicione uma nova tarefa para atualizar.',
+    subMsg: 'Você precisa editar a tarefa para atualizar.',
     corner: 20.0,
     duration: 5000,
     padding: const EdgeInsets.all(20),
@@ -58,7 +59,7 @@ dynamic deleteAllTasks(BuildContext context) {
     },
     onTapConfirm: () {
       //NOTE: Vamos usar esse comando para apagar toda a BD  do Hive
-      // BaseWidget.of(context).dataStore.box.clear();
+      BaseWidget.of(context).dataStore.box.clear();
       Navigator.pop(context);
     },
     panaraDialogType: PanaraDialogType.error,

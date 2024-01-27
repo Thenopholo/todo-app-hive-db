@@ -1,4 +1,5 @@
 import 'package:curso_flutter/utils/constants.dart';
+import 'package:curso_flutter/views/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
@@ -48,6 +49,8 @@ class _HomeAppBarState extends State<HomeAppBar>
 
   @override
   Widget build(BuildContext context) {
+    var base = BaseWidget.of(context).dataStore.box;
+
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -75,7 +78,9 @@ class _HomeAppBarState extends State<HomeAppBar>
               child: IconButton(
                 onPressed: () {
                   deleteAllTasks(context);
-                  ///TODO: VAMOS REMOVER TODOS AS TASKS DA TELA COM ESSE BOTAO
+                  base.isEmpty
+                      ? noTaskWarnig(context)
+                      : deleteAllTasks(context);
                 },
                 icon: const Icon(
                   CupertinoIcons.trash_fill,

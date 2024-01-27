@@ -15,15 +15,13 @@ Future<void> main() async {
   Box box = await Hive.openBox<Task>(HiveDataStore.boxName);
 
   ///DELETE TASKS FROM PREVIOUS DAY
-  box.values.forEach(
-    (task) {
+  for (var task in box.values) {
       if (task.createdAtTime.day != DateTime.now().day) {
         task.delete();
       } else {
         ///DO NOTHING
       }
-    },
-  );
+    }
 
   runApp(BaseWidget(child: const MyApp()));
 }

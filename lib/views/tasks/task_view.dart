@@ -1,5 +1,4 @@
-import 'dart:developer';
-import 'dart:math';
+// ignore_for_file: prefer_typing_uninitialized_variables
 import 'package:curso_flutter/extensions/space_ext.dart';
 import 'package:curso_flutter/models/task.dart';
 import 'package:curso_flutter/utils/app_colors.dart';
@@ -99,7 +98,7 @@ class _TaskViewState extends State<TaskView> {
 
         widget.task?.save();
 
-        ///TODO: POP PAGE
+        Navigator.pop(context);
       } catch (e) {
         /// IF USER WANT TO UPDATE TASK BUT DONT WANT TO CHANGE ANYTHING, WE WILL SHOW THIS WARNING
         updateTaskWarnig(context);
@@ -120,12 +119,17 @@ class _TaskViewState extends State<TaskView> {
         /// WE ARE ADDING THIS NEW TASK TO HIVE DB USING INHERITED WIDGET
         BaseWidget.of(context).dataStore.addTask(task: task);
 
-        ///TODO: POP PAGE
+        Navigator.pop(context);
       } else {
         /// WARNING
         emptyWarning(context);
       }
     }
+  }
+
+  /// DELTE TASK FUNCTION
+  dynamic deleTask() {
+    widget.task?.delete();
   }
 
   @override
@@ -177,7 +181,10 @@ class _TaskViewState extends State<TaskView> {
 
               ///DELETE CURRENT TASK BUTTON
               MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    deleTask();
+                    Navigator.pop(context);
+                  },
                   minWidth: 150,
                   color: AppColors.primaryColor,
                   shape: RoundedRectangleBorder(
@@ -187,7 +194,7 @@ class _TaskViewState extends State<TaskView> {
                   child: Row(
                     children: [
                       const Icon(
-                        Icons.delete,
+                        Icons.delete_outline_rounded,
                         color: Colors.white,
                       ),
                       5.w,
@@ -212,9 +219,11 @@ class _TaskViewState extends State<TaskView> {
               borderRadius: BorderRadius.circular(15),
             ),
             height: 55,
-            child: const Text(
-              AppStr.addNewTaskButton,
-              style: TextStyle(
+            child: Text(
+              isTaskAlreadyExist()
+                  ? AppStr.addNewTask
+                  : AppStr.updateButtonCurrentTask,
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ),
